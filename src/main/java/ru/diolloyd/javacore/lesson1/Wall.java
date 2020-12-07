@@ -1,6 +1,6 @@
 package ru.diolloyd.javacore.lesson1;
 
-public class Wall extends Obstructions {
+public class Wall implements Obstructions {
     private final int heightWall;
 
     public Wall(int heightWall) {
@@ -8,7 +8,7 @@ public class Wall extends Obstructions {
     }
 
     @Override
-    boolean overcome(Actions member) {
+    public boolean overcome(Actions member) {
         return member.jumping(heightWall);
     }
 }

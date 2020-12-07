@@ -1,7 +1,7 @@
 package ru.diolloyd.javacore.lesson1;
 
-abstract class Obstructions {
+interface Obstructions {
 
-    abstract boolean overcome(Actions member);
+    boolean overcome(Actions member);
 
 }
