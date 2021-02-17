@@ -21,7 +21,7 @@ public class AccuWeatherProvider implements IWeatherProvider {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void getCurrentWeather(String cityKey) throws IOException {
+    public CurrentWeather getCurrentWeather(String cityKey) throws IOException {
         //http://dataservice.accuweather.com/currentconditions/v1/27497?apikey={{accuweatherApiKey}}
 
         HttpUrl getWeatherUrl = new HttpUrl.Builder()
@@ -45,10 +45,13 @@ public class AccuWeatherProvider implements IWeatherProvider {
         }
 
         String jsonBodyResponse = response.body().string();
-        Integer temperature = objectMapper.readTree(jsonBodyResponse).get(0).at("/Temperature/Metric/Value").asInt();
-        String unit = objectMapper.readTree(jsonBodyResponse).get(0).at("/Temperature/Metric/Unit").asText();
-        String precipitation = objectMapper.readTree(jsonBodyResponse).get(0).at("/WeatherText").asText();
-        System.out.printf("Текущая погода %d %s\nПогодные условия: %s\n", temperature, unit, precipitation);
+
+        JsonNode jsonNode = objectMapper.readTree(jsonBodyResponse).get(0);
+        City city = AppGlobalState.getInstance().getCity();
+        String location = city.getName() + ", " + city.getCountry();
+
+        CurrentWeather weather = new CurrentWeather(location, jsonNode);
+        return weather;
     }
 
     @Override

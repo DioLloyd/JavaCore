@@ -14,36 +14,46 @@ public class UserInterface implements IUserInterface {
     public void showMenu() {
 
         while (true) {
-            System.out.println("Введите название города на английском языке или 'exit' для выхода");
             Scanner scanner = new Scanner(System.in);
-
-            String userResponse = scanner.nextLine();
-
-            checkIsExit(userResponse);
-
-            try{
-                controller.onCityInput(userResponse);
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            System.out.println("Введите команду\n1 - для получения погоды на текущий день\n2 - для получения погоды на пять дней");
+            System.out.println("Введите команду\n1 - для получения погоды на текущий день\n" +
+                    "2 - для получения погоды на пять дней\n" +
+                    "3 - для получения архива погоды\n" +
+                    "0 - для выхода");
 
             int selectedCommand = scanner.nextInt();
+            scanner.nextLine();
+            checkIsExit(selectedCommand);
+            if (selectedCommand == 1 || selectedCommand == 2) {
+                System.out.println("Введите название города на английском языке или 'exit' для выхода");
 
+                String userResponse = scanner.nextLine();
+
+                checkIsExit(userResponse);
+                try {
+                    controller.onCityInput(userResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+            }
             try {
                 controller.onCommandChosen(selectedCommand);
             } catch (IOException e) {
                 e.printStackTrace();
-                continue;
             }
         }
     }
 
     private void checkIsExit(String userResponse) {
         if (userResponse.equalsIgnoreCase("exit") ||
-        userResponse.equalsIgnoreCase("выход")) {
+                userResponse.equalsIgnoreCase("выход")) {
+            System.out.println("Завершаю работу...");
+            System.exit(0);
+        }
+    }
+
+    private void checkIsExit(int userResponse) {
+        if (userResponse == 0) {
             System.out.println("Завершаю работу...");
             System.exit(0);
         }
