@@ -55,7 +55,7 @@ public class AccuWeatherProvider implements IWeatherProvider {
     }
 
     @Override
-    public void getWeatherOnFiveDays(String cityKey) throws IOException {
+    public WeatherResponse getWeatherOnFiveDays(String cityKey) throws IOException {
         // http://dataservice.accuweather.com/forecasts/v1/daily/5day/{locationKey}?apikey={{accuweatherApiKey}}
 
         HttpUrl getWeatherUrl = new HttpUrl.Builder()
@@ -84,14 +84,8 @@ public class AccuWeatherProvider implements IWeatherProvider {
         String jsonBodyResponse = response.body().string();
 
         JsonNode rootNode = objectMapper.readTree(jsonBodyResponse);
-        WeatherResponse weatherResponse = new WeatherResponse(rootNode);
+        return new WeatherResponse(rootNode);
 
-        for (DailyForecast df : weatherResponse.getDailyForecasts()) {
-            System.out.printf("В городе %s на дату %s ожидается: %s, температура от %d%s до %d%s%n",
-                    AppGlobalState.getInstance().getCity().getName(), df.getDate(), df.getWeatherText(),
-                    df.getMinTemperature(), weatherResponse.getUnit(),
-                    df.getMaxTemperature(), weatherResponse.getUnit());
 
-        }
     }
 }

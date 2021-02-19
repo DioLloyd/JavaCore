@@ -32,7 +32,14 @@ public class Controller implements IController {
                 break;
             }
             case 2: {
-                weatherProvider.getWeatherOnFiveDays(AppGlobalState.getInstance().getCity().getKey());
+                WeatherResponse weatherResponse = weatherProvider.getWeatherOnFiveDays(AppGlobalState.getInstance().getCity().getKey());
+                for (DailyForecast df : weatherResponse.getDailyForecasts()) {
+                    System.out.printf("В городе %s на дату %s ожидается: %s, температура от %d%s до %d%s%n",
+                            AppGlobalState.getInstance().getCity().getName(), df.getDate(), df.getWeatherText(),
+                            df.getMinTemperature(), weatherResponse.getUnit(),
+                            df.getMaxTemperature(), weatherResponse.getUnit());
+
+                }
                 break;
             }
             case 3: {
